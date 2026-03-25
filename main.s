@@ -7,7 +7,7 @@ newline: .asciiz "\n"
 call: .word 0
 startValOne: .word 0
 startValTwo: .word 0
-index: .word 0
+N: .word 0
 main:
     li $a0, 0
     li $a1, 1
@@ -19,33 +19,42 @@ main:
 
     jal fibFunction
 
-    li $a0, 0
-    li $a1, 1
-    li $a2, 7
-    sw $a0, startValOne
-    sw $a1, startValTwo
-    sw $a2, call
-
-    jal fibFunctionRecursive
-
-end:
-    li $v0, 10
-    syscall
-fibFunction:
-    li $t2, 0
-    sw $t2, index
-forLoop:
-    lw $t2, index
-    lw $t3, call
-    beq $t2, $t3, done
-
-    lw $a0, startValOne
+    move $a0, $v0
     li $v0, 1
     syscall
 
     li $v0, 4
     la $a0, newline
     syscall
+
+    li $a0, 0
+    li $a1, 1
+    li $a2, 7
+
+    sw $a0, startValOne
+    sw $a1, startValTwo
+    sw $a2, call
+
+    jal fibFunctionRecursive
+
+    move $a0, $v0
+    li $v0, 1
+    syscall
+
+    li $v0, 4
+    la $a0, newline
+    syscall
+
+end:
+    li $v0, 10
+    syscall
+fibFunction:
+    li $t2, 0
+    sw $t2, N
+forLoop:
+    lw $t2, N
+    lw $t3, call
+    beq $t2, $t3, done
 
     lw $t0, startValOne
     lw $t1, startValTwo
@@ -54,7 +63,7 @@ forLoop:
     sw $t4, startValTwo
 
     addi $t2, $t2, 1
-    sw $t2, index
+    sw $t2, N
     j forLoop
 
 done:
@@ -66,8 +75,6 @@ fibFunctionRecursive:
 
     lw $t0, call
     beqz $t0, return
-    li $t4, 1
-    beq $t0, $t4, baseCase
     addi $t0, $t0, -1
     sw $t0, call
     jal fibFunctionRecursive
@@ -78,26 +85,9 @@ fibFunctionRecursive:
     sw $t2, startValOne
     sw $t3, startValTwo
 
-    lw $a0, startValOne
-    li $v0, 1
-    syscall
-
-    li $v0, 4
-    la $a0, newline
-    syscall
-
     j return
-
-baseCase:
-    lw $a0, startValOne
-    li $v0, 1
-    syscall
-
-    li $v0, 4
-    la $a0, newline
-    syscall
-
 return:
+    lw $v0, startValOne
     lw $ra, 0($sp)
     addi $sp, $sp, 4
     jr $ra
