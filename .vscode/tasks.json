@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run MIPS (SPIM)",
+      "type": "shell",
+      "command": "spim",
+      "args": [
+        "-file",
+        "${file}"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run MIPS (MARS jar)",
+      "type": "shell",
+      "command": "java",
+      "args": [
+        "-jar",
+        "${workspaceFolder}/tools/Mars4_5.jar",
+        "nc",
+        "${file}"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
